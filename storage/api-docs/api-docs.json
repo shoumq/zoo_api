@@ -1,0 +1,542 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Shop API",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Вход",
+                "operationId": "8dcb70df1020986038d098cc08d05dae",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "number",
+                                                "example": "1"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Андрей"
+                                            },
+                                            "surname": {
+                                                "type": "string",
+                                                "example": "Лясковский"
+                                            },
+                                            "address": {
+                                                "type": "string",
+                                                "example": "1-й Красногвардейский проезд, 22с1, Москва"
+                                            },
+                                            "phone": {
+                                                "type": "string",
+                                                "example": "+7 (903) 111-11-11"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "lae3145@mail.ru"
+                                            },
+                                            "email_verified_at": {
+                                                "type": "string",
+                                                "example": "null"
+                                            },
+                                            "created_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T08:27:30.000000Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T09:45:07.000000Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/auth/me": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Информаиця о пользователе",
+                "operationId": "f0b15943f55143d36f606a2dbd1d2366",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "number",
+                                                "example": "1"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Андрей"
+                                            },
+                                            "surname": {
+                                                "type": "string",
+                                                "example": "Лясковский"
+                                            },
+                                            "address": {
+                                                "type": "string",
+                                                "example": "1-й Красногвардейский проезд, 22с1, Москва"
+                                            },
+                                            "phone": {
+                                                "type": "string",
+                                                "example": "+7 (903) 111-11-11"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "lae3145@mail.ru"
+                                            },
+                                            "email_verified_at": {
+                                                "type": "string",
+                                                "example": "null"
+                                            },
+                                            "created_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T08:27:30.000000Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T09:45:07.000000Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Выход",
+                "operationId": "69281b12abb272c76871f19cb17ca563",
+                "responses": {
+                    "200": {
+                        "description": "Successfully logged out"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Обновление токена",
+                "operationId": "b2eae7a8032954d25b46c7ec6f489c68",
+                "responses": {
+                    "200": {
+                        "description": "Successfully refresh"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Регистрация",
+                "operationId": "651f8e74dc32f06cb7c61fdca24605e5",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "name": "surname",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "name": "address",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "name": "password_confirmed",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "number",
+                                                "example": "1"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Андрей"
+                                            },
+                                            "surname": {
+                                                "type": "string",
+                                                "example": "Лясковский"
+                                            },
+                                            "address": {
+                                                "type": "string",
+                                                "example": "1-й Красногвардейский проезд, 22с1, Москва"
+                                            },
+                                            "phone": {
+                                                "type": "string",
+                                                "example": "+7 (903) 111-11-11"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "lae3145@mail.ru"
+                                            },
+                                            "email_verified_at": {
+                                                "type": "string",
+                                                "example": "null"
+                                            },
+                                            "created_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T08:27:30.000000Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T09:45:07.000000Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/categories": {
+            "get": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Все категории",
+                "operationId": "a7e79cc49a988408dca3804f01d38fc7",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "number",
+                                                "example": "1"
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Акции"
+                                            },
+                                            "code": {
+                                                "type": "string",
+                                                "example": "sales"
+                                            },
+                                            "created_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T08:27:30.000000Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T09:45:07.000000Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/add_category": {
+            "post": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Добавить категорию",
+                "operationId": "3bfa0b3bbb02b944cc93a2c250433afe",
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category successfully created"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/delete_category": {
+            "delete": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Удалить категорию",
+                "operationId": "ceefbcc8c0f0d5fe6b3792ad2909be09",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category successfully deleted"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/favorites": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Избранное",
+                "operationId": "76f556b3d2e972ad673f3a445cc18e6a",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "number",
+                                                "example": "1"
+                                            },
+                                            "product_id": {
+                                                "type": "number",
+                                                "example": "2"
+                                            },
+                                            "user_id": {
+                                                "type": "number",
+                                                "example": "5"
+                                            },
+                                            "created_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T08:27:30.000000Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T09:45:07.000000Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/basket": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Корзина",
+                "operationId": "149d7ae0f454ce951afaabc22799157d",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "number",
+                                                "example": "1"
+                                            },
+                                            "product_id": {
+                                                "type": "number",
+                                                "example": "2"
+                                            },
+                                            "user_id": {
+                                                "type": "number",
+                                                "example": "5"
+                                            },
+                                            "created_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T08:27:30.000000Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T09:45:07.000000Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearer_token": {
+                "type": "http",
+                "scheme": "bearer",
+                "description": "Your token",
+                "name": "Auth",
+                "in": "header"
+            }
+        }
+    }
+}

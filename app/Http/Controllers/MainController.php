@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
@@ -250,6 +251,94 @@ class MainController extends Controller
 
 
 
+
+    /**
+     * @OA\Post(
+     *     path="/api/add_favorites",
+     *     summary="Добавить в избранное",
+     *     tags={"Profile"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="product_id",
+     *         in="query",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="",
+     *         @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema (
+     *          type="array",
+     *               @OA\Items(
+     *                 @OA\Property(property="id", type="number", example="1"),
+     *                 @OA\Property(property="product_id", type="number", example="2"),
+     *                 @OA\Property(property="user_id", type="number", example="5"),
+     *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
+     *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
+     *            ),
+     *          )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function addFavorites(Request $request): JsonResponse
+    {
+        $favorite = new Favorites();
+        $favorite->user_id = Auth::user()->id;
+        $favorite->product_id = $request->product_id;
+        $favorite->save();
+
+        return response()->json($favorite);
+    }
+
+
+
+
+
+    /**
+     * @OA\Delete(
+     *     path="/api/delete_favorites",
+     *     summary="Удалить товар из избранного",
+     *     tags={"Profile"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="query",
+     *         required=true,
+     *    ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Favorite successfully deleted",
+     *     ),
+     *      @OA\Response(
+     *         response=404,
+     *         description="Not found",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function deleteFavorites(Request $request): JsonResponse
+    {
+        try {
+            $favorite = Favorites::find($request->id);
+            $favorite->delete();
+            return response()->json(['Message' => 'Favorite successfully deleted']);
+        } catch (\Exception $exception) {
+            return response()->json(['Message' => 'Error']);
+        }
+    }
+
+
+
+
     /**
      * @OA\Get(
      *     path="/api/basket",
@@ -278,5 +367,88 @@ class MainController extends Controller
     public function basket()
     {
         return Basket::where('user_id', auth()->user()->id)->get();
+    }
+
+
+    /**
+     * @OA\Post(
+     *     path="/api/add_basket",
+     *     summary="Добавить в корзину",
+     *     tags={"Profile"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="product_id",
+     *         in="query",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="",
+     *         @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema (
+     *          type="array",
+     *               @OA\Items(
+     *                 @OA\Property(property="id", type="number", example="1"),
+     *                 @OA\Property(property="product_id", type="number", example="2"),
+     *                 @OA\Property(property="user_id", type="number", example="5"),
+     *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
+     *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
+     *            ),
+     *          )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function addBasket(Request $request): JsonResponse
+    {
+        $basket = new Basket();
+        $basket->user_id = Auth::user()->id;
+        $basket->product_id = $request->product_id;
+        $basket->save();
+
+        return response()->json($basket);
+    }
+
+
+
+    /**
+     * @OA\Delete(
+     *     path="/api/delete_basket",
+     *     summary="Удалить товар из коризны",
+     *     tags={"Profile"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="query",
+     *         required=true,
+     *    ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Basket successfully deleted",
+     *     ),
+     *      @OA\Response(
+     *         response=404,
+     *         description="Not found",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function deleteBasket(Request $request): JsonResponse
+    {
+        try {
+            $basket = Basket::find($request->id);
+            $basket->delete();
+            return response()->json(['Message' => 'Basket successfully deleted']);
+        } catch (\Exception $exception) {
+            return response()->json(['Message' => 'Error']);
+        }
     }
 }

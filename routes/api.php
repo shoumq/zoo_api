@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
@@ -37,11 +38,19 @@ Route::group([
 
 Route::group(['middleware' => 'jwt.auth'], function () {
     Route::get('favorites', [MainController::class, 'favorites']);
+    Route::post('add_favorites', [MainController::class, 'addFavorites']);
+    Route::delete('delete_favorites', [MainController::class, 'deleteFavorites']);
     Route::get('basket', [MainController::class, 'basket']);
+    Route::post('add_basket', [MainController::class, 'addBasket']);
+    Route::delete('delete_basket', [MainController::class, 'deleteBasket']);
 });
+
+
+Route::post('add_admin', [AdminController::class, 'addAdmin']);
 
 
 Route::group(['middleware' => 'admin'], function () {
     Route::post('add_category', [MainController::class, 'addCategory']);
     Route::delete('delete_category', [MainController::class, 'deleteCategory']);
+    Route::post('delete_admin', [AdminController::class, 'deleteAdmin']);
 });

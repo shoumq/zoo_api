@@ -5,6 +5,70 @@
         "version": "1.0"
     },
     "paths": {
+        "/api/add_admin": {
+            "post": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Добавить админа",
+                "operationId": "99e5eaf22fded43af6bee0135f370254",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Admin added successfully"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/delete_admin": {
+            "post": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Удалить админа",
+                "operationId": "8e3cda48c7481f442f56d177964d1db2",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Admin deleted successfully"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
         "/api/auth/login": {
             "post": {
                 "tags": [
@@ -88,7 +152,7 @@
         "/api/auth/me": {
             "post": {
                 "tags": [
-                    "Auth"
+                    "Profile"
                 ],
                 "summary": "Информаиця о пользователе",
                 "operationId": "f0b15943f55143d36f606a2dbd1d2366",
@@ -476,6 +540,99 @@
                 ]
             }
         },
+        "/api/add_favorites": {
+            "post": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Добавить в избранное",
+                "operationId": "60fe14d188fcac564c22b5eab4423601",
+                "parameters": [
+                    {
+                        "name": "product_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "number",
+                                                "example": "1"
+                                            },
+                                            "product_id": {
+                                                "type": "number",
+                                                "example": "2"
+                                            },
+                                            "user_id": {
+                                                "type": "number",
+                                                "example": "5"
+                                            },
+                                            "created_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T08:27:30.000000Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T09:45:07.000000Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/delete_favorites": {
+            "delete": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Удалить товар из избранного",
+                "operationId": "451b84ac8d2b2d6ee58ce7212f48d8c1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Favorite successfully deleted"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
         "/api/basket": {
             "get": {
                 "tags": [
@@ -518,6 +675,99 @@
                                 }
                             }
                         }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/add_basket": {
+            "post": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Добавить в корзину",
+                "operationId": "07b0aa9821b01274791153c69cb997a5",
+                "parameters": [
+                    {
+                        "name": "product_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "number",
+                                                "example": "1"
+                                            },
+                                            "product_id": {
+                                                "type": "number",
+                                                "example": "2"
+                                            },
+                                            "user_id": {
+                                                "type": "number",
+                                                "example": "5"
+                                            },
+                                            "created_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T08:27:30.000000Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T09:45:07.000000Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/delete_basket": {
+            "delete": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Удалить товар из коризны",
+                "operationId": "06e594a2bf19b6afe387847ec5f0f0ee",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Basket successfully deleted"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 },
                 "security": [

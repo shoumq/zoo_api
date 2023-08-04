@@ -104,11 +104,11 @@ class AdminController extends Controller
      *          type="array",
      *               @OA\Items(
      *                 @OA\Property(property="id", type="number", example="1"),
-     *                 @OA\Property(property="name", type="string", example="Андрей"),
-     *                 @OA\Property(property="surname", type="string", example="Лясковский"),
+     *                 @OA\Property(property="name", type="string", example="Андрей", minLength=1, maxLength=50),
+     *                 @OA\Property(property="surname", type="string", example="Лясковский", minLength=1, maxLength=50),
      *                 @OA\Property(property="address", type="string", example="1-й Красногвардейский проезд, 22с1, Москва"),
      *                 @OA\Property(property="phone", type="string", example="+7 (903) 111-11-11"),
-     *                 @OA\Property(property="email", type="string", example="lae3145@mail.ru"),
+     *                 @OA\Property(property="email", type="string", example="lae3145@mail.ru", minLength=3, maxLength=50),
      *                 @OA\Property(property="email_verified_at", type="string", example="null"),
      *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
      *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
@@ -148,7 +148,7 @@ class AdminController extends Controller
      *          type="array",
      *               @OA\Items(
      *                 @OA\Property(property="id", type="number", example="1"),
-     *                 @OA\Property(property="user_email", type="string", example="lae3145@mail.ru"),
+     *                 @OA\Property(property="user_email", type="string", example="lae3145@mail.ru", minLength=3, maxLength=50),
      *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
      *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
      *            ),

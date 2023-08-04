@@ -68,15 +68,9 @@ class MainController extends Controller
      *         @OA\Schema (
      *          type="array",
      *               @OA\Items(
-     *                 @OA\Property(property="id", type="number", example="1"),
-     *                 @OA\Property(property="name", type="string", example="Андрей"),
-     *                 @OA\Property(property="surname", type="string", example="Лясковский"),
-     *                 @OA\Property(property="address", type="string", example="1-й Красногвардейский проезд, 22с1, Москва"),
-     *                 @OA\Property(property="phone", type="string", example="+7 (903) 111-11-11"),
-     *                 @OA\Property(property="email", type="string", example="lae3145@mail.ru"),
-     *                 @OA\Property(property="email_verified_at", type="string", example="null"),
-     *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
-     *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
+     *                 @OA\Property(property="access_token", type="string", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2OTExNDgzNTAsImV4cCI6MTY5Mzc0MDM1MCwibmJmIjoxNjkxMTQ4MzUwLCJqdGkiOiJDdlhPZnd6dWM0Rko5MklOIiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmdsr6YWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.ZXquNUAvkXvTxCzf6Uj639B8n5K41Lm-j5xOPm08J3o"),
+     *                 @OA\Property(property="token_type", type="string", example="bearer"),
+     *                 @OA\Property(property="expires_in", type="number", example="1866240000"),
      *            ),
      *          )
      *         )
@@ -131,8 +125,8 @@ class MainController extends Controller
      *          type="array",
      *               @OA\Items(
      *                 @OA\Property(property="id", type="number", example="1"),
-     *                 @OA\Property(property="title", type="string", example="Акции"),
-     *                 @OA\Property(property="code", type="string", example="sales"),
+     *                 @OA\Property(property="title", type="string", example="Акции", minLength=1, maxLength=100),
+     *                 @OA\Property(property="code", type="string", example="sales", minLength=1, maxLength=150),
      *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
      *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
      *            ),

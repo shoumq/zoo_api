@@ -85,7 +85,7 @@ class MainController extends Controller
      *     )
      * )
      */
-    public function registerStore(RegisterRequest $request): JsonResponse
+    public function registerStore(RegisterRequest $request)
     {
         try {
             if ($request->password == $request->password_confirmed) {
@@ -98,7 +98,14 @@ class MainController extends Controller
                 $user->phone = $request->phone;
                 $user->save();
 
-                return response()->json($user);
+
+                $credentials = request(['email', 'password']);
+
+                if (! $token = auth()->attempt($credentials)) {
+                    return response()->json(['error' => 'Unauthorized'], 401);
+                }
+
+                return $this->respondWithToken($token);
             }
 
             return response()->json("Password error");
@@ -450,5 +457,22 @@ class MainController extends Controller
         } catch (\Exception $exception) {
             return response()->json(['Message' => 'Error']);
         }
+    }
+
+
+    /**
+     * Get the token array structure.
+     *
+     * @param  string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 43200
+        ]);
     }
 }

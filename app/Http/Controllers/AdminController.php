@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Email;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -127,5 +129,44 @@ class AdminController extends Controller
     public function getUser($user_id)
     {
         return User::find($user_id);
+    }
+
+
+
+    /**
+     * @OA\Get(
+     *     path="/api/display_of_subscribers",
+     *     summary="Вывод подписчиков",
+     *     tags={"Admin"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="",
+     *         @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema (
+     *          type="array",
+     *               @OA\Items(
+     *                 @OA\Property(property="id", type="number", example="1"),
+     *                 @OA\Property(property="user_email", type="string", example="lae3145@mail.ru"),
+     *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
+     *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
+     *            ),
+     *          )
+     *         )
+     *     ),
+     *      @OA\Response(
+     *         response=404,
+     *         description="Not found",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function displayOfSubscribers(): Collection
+    {
+        return Email::all();
     }
 }

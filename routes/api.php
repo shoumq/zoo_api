@@ -56,4 +56,5 @@ Route::group(['middleware' => 'admin'], function () {
     Route::delete('delete_category', [MainController::class, 'deleteCategory']);
     Route::post('delete_admin', [AdminController::class, 'deleteAdmin']);
     Route::get('user/{user_id}', [AdminController::class, 'getUser']);
+    Route::get('display_of_subscribers', [AdminController::class, 'displayOfSubscribers']);
 });

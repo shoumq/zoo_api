@@ -462,60 +462,6 @@ class MainController extends Controller
     }
 
 
-
-    /**
-     * @OA\Post(
-     *     path="/api/test",
-     *     summary="тест",
-     *     tags={"Admin"},
-     *      @OA\RequestBody(
-     *          @OA\MediaType(
-     *              mediaType="multipart/form-data",
-     *              @OA\Schema(
-     *              type="object",
-     *              @OA\Property(
-     *                  description="file to upload",
-     *                  type="array",
-     *                  @OA\Items(
-     *                      type="string",
-     *                      format="text",
-     *                  ),
-     *              )
-     *            )
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="accept",
-     *         in="header",
-     *         description="test",
-     *         @OA\Schema(
-     *             type="string",
-     *             default="multipart/form-data"
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Basket successfully deleted",
-     *     ),
-     *      @OA\Response(
-     *         response=404,
-     *         description="Not found",
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Internal Server Error",
-     *     ),
-     *
-     * )
-     */
-    public function test(Request $request): Request
-    {
-        return $request;
-    }
-
-
-
-
     /**
      * @OA\Post(
      *     path="/api/subscribe_to_newsletter",

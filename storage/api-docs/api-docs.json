@@ -69,6 +69,86 @@
                 ]
             }
         },
+        "/api/user/{user_id}": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Информаиця о пользователе",
+                "operationId": "177c5e2c1cd1df583b98c0e2403c7bcc",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "number",
+                                                "example": "1"
+                                            },
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Андрей"
+                                            },
+                                            "surname": {
+                                                "type": "string",
+                                                "example": "Лясковский"
+                                            },
+                                            "address": {
+                                                "type": "string",
+                                                "example": "1-й Красногвардейский проезд, 22с1, Москва"
+                                            },
+                                            "phone": {
+                                                "type": "string",
+                                                "example": "+7 (903) 111-11-11"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "lae3145@mail.ru"
+                                            },
+                                            "email_verified_at": {
+                                                "type": "string",
+                                                "example": "null"
+                                            },
+                                            "created_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T08:27:30.000000Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "time",
+                                                "example": "2023-07-06T09:45:07.000000Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
         "/api/auth/login": {
             "post": {
                 "tags": [
@@ -154,7 +234,7 @@
                 "tags": [
                     "Profile"
                 ],
-                "summary": "Информаиця о пользователе",
+                "summary": "Информаиця о текущем пользователе",
                 "operationId": "f0b15943f55143d36f606a2dbd1d2366",
                 "responses": {
                     "200": {
@@ -765,6 +845,85 @@
                     },
                     "404": {
                         "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/test": {
+            "post": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "тест",
+                "operationId": "a7d87633cd5dee05da6f8018ece9ea2f",
+                "parameters": [
+                    {
+                        "name": "accept",
+                        "in": "header",
+                        "description": "test",
+                        "schema": {
+                            "type": "string",
+                            "default": "multipart/form-data"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "": {
+                                        "description": "file to upload",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "text"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Basket successfully deleted"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/api/subscribe_to_newsletter": {
+            "post": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Подписаться на рассылку",
+                "operationId": "791f17b5648b7c29186df9ed8eed7c8a",
+                "parameters": [
+                    {
+                        "name": "user_email",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully"
                     },
                     "500": {
                         "description": "Internal Server Error"

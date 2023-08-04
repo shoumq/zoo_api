@@ -24,6 +24,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('register', [MainController::class, 'registerStore']);
 Route::get('categories', [MainController::class, 'categories']);
+Route::post('test', [MainController::class, 'test']);
+Route::post('subscribe_to_newsletter', [MainController::class, 'subscribeToNewsletter']);
 
 Route::group([
     'middleware' => 'api',
@@ -53,4 +55,5 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('add_category', [MainController::class, 'addCategory']);
     Route::delete('delete_category', [MainController::class, 'deleteCategory']);
     Route::post('delete_admin', [AdminController::class, 'deleteAdmin']);
+    Route::get('user/{user_id}', [AdminController::class, 'getUser']);
 });

@@ -86,7 +86,7 @@ class AuthController extends Controller
     /**
      * @OA\Post(
      *     path="/api/auth/me",
-     *     summary="Информаиця о пользователе",
+     *     summary="Информаиця о текущем пользователе",
      *     tags={"Profile"},
      *     security={{"bearer_token":{}}},
      *     @OA\Response(

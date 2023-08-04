@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RegisterRequest;
 use App\Models\Basket;
 use App\Models\Category;
+use App\Models\Email;
 use App\Models\Favorites;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -457,6 +458,91 @@ class MainController extends Controller
         } catch (\Exception $exception) {
             return response()->json(['Message' => 'Error']);
         }
+    }
+
+
+
+    /**
+     * @OA\Post(
+     *     path="/api/test",
+     *     summary="тест",
+     *     tags={"Admin"},
+     *      @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="multipart/form-data",
+     *              @OA\Schema(
+     *              type="object",
+     *              @OA\Property(
+     *                  description="file to upload",
+     *                  type="array",
+     *                  @OA\Items(
+     *                      type="string",
+     *                      format="text",
+     *                  ),
+     *              )
+     *            )
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="accept",
+     *         in="header",
+     *         description="test",
+     *         @OA\Schema(
+     *             type="string",
+     *             default="multipart/form-data"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Basket successfully deleted",
+     *     ),
+     *      @OA\Response(
+     *         response=404,
+     *         description="Not found",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     ),
+     *
+     * )
+     */
+    public function test(Request $request): Request
+    {
+        return $request;
+    }
+
+
+
+
+    /**
+     * @OA\Post(
+     *     path="/api/subscribe_to_newsletter",
+     *     summary="Подписаться на рассылку",
+     *     tags={"Profile"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="user_email",
+     *         in="query",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successfully",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function subscribeToNewsletter(Request $request): JsonResponse
+    {
+        $email = new Email();
+        $email->user_email = $request->user_email;
+        $email->save();
+
+        return response()->json(['Message' => 'Successfully']);
     }
 
 

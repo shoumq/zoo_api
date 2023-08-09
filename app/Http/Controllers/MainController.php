@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
+use App\Models\Address;
 use App\Models\Basket;
 use App\Models\Category;
 use App\Models\Email;
 use App\Models\Favorites;
 use App\Models\FavoriteStores;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\Collection;
@@ -98,7 +100,7 @@ class MainController extends Controller
 
                 $credentials = request(['email', 'password']);
 
-                if (! $token = auth()->attempt($credentials)) {
+                if (!$token = auth()->attempt($credentials)) {
                     return response()->json(['error' => 'Unauthorized'], 401);
                 }
 
@@ -142,7 +144,6 @@ class MainController extends Controller
     }
 
 
-
     /**
      * @OA\Post(
      *     path="/api/add_category",
@@ -184,7 +185,6 @@ class MainController extends Controller
     }
 
 
-
     /**
      * @OA\Delete(
      *     path="/api/delete_category",
@@ -222,12 +222,11 @@ class MainController extends Controller
     }
 
 
-
     /**
      * @OA\Get(
      *     path="/api/favorites",
      *     summary="Избранное",
-     *     tags={"Profile"},
+     *     tags={"Favorites"},
      *     security={{"bearer_token":{}}},
      *     @OA\Response(
      *         response=200,
@@ -254,13 +253,11 @@ class MainController extends Controller
     }
 
 
-
-
     /**
      * @OA\Post(
      *     path="/api/add_favorites",
      *     summary="Добавить в избранное",
-     *     tags={"Profile"},
+     *     tags={"Favorites"},
      *     security={{"bearer_token":{}}},
      *     @OA\Parameter(
      *         name="product_id",
@@ -293,7 +290,7 @@ class MainController extends Controller
     public function addFavorites(Request $request): JsonResponse
     {
         $favorite = new Favorites();
-        $favorite->user_id = Auth::user()->id;
+        $favorite->user_id = auth()->user()->id;
         $favorite->product_id = $request->product_id;
         $favorite->save();
 
@@ -301,14 +298,11 @@ class MainController extends Controller
     }
 
 
-
-
-
     /**
      * @OA\Delete(
      *     path="/api/delete_favorites",
      *     summary="Удалить товар из избранного",
-     *     tags={"Profile"},
+     *     tags={"Favorites"},
      *     security={{"bearer_token":{}}},
      *     @OA\Parameter(
      *         name="id",
@@ -341,12 +335,11 @@ class MainController extends Controller
     }
 
 
-
     /**
      * @OA\Get(
      *     path="/api/basket",
      *     summary="Корзина",
-     *     tags={"Profile"},
+     *     tags={"Basket"},
      *     security={{"bearer_token":{}}},
      *     @OA\Response(
      *         response=200,
@@ -377,7 +370,7 @@ class MainController extends Controller
      * @OA\Post(
      *     path="/api/add_basket",
      *     summary="Добавить в корзину",
-     *     tags={"Profile"},
+     *     tags={"Basket"},
      *     security={{"bearer_token":{}}},
      *     @OA\Parameter(
      *         name="product_id",
@@ -410,7 +403,7 @@ class MainController extends Controller
     public function addBasket(Request $request): JsonResponse
     {
         $basket = new Basket();
-        $basket->user_id = Auth::user()->id;
+        $basket->user_id = auth()->user()->id;
         $basket->product_id = $request->product_id;
         $basket->save();
 
@@ -418,12 +411,11 @@ class MainController extends Controller
     }
 
 
-
     /**
      * @OA\Delete(
      *     path="/api/delete_basket",
      *     summary="Удалить товар из коризны",
-     *     tags={"Profile"},
+     *     tags={"Basket"},
      *     security={{"bearer_token":{}}},
      *     @OA\Parameter(
      *         name="id",
@@ -487,13 +479,11 @@ class MainController extends Controller
     }
 
 
-
-
     /**
      * @OA\Get(
      *     path="/api/favorite_stores",
      *     summary="Любимые магазины",
-     *     tags={"Profile"},
+     *     tags={"Favorite Stores"},
      *     security={{"bearer_token":{}}},
      *     @OA\Response(
      *         response=200,
@@ -504,7 +494,7 @@ class MainController extends Controller
      *          type="array",
      *               @OA\Items(
      *                 @OA\Property(property="id", type="number", example="1"),
-     *                 @OA\Property(property="product_id", type="number", example="2"),
+     *                 @OA\Property(property="shop_id", type="number", example="2"),
      *                 @OA\Property(property="user_id", type="number", example="5"),
      *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
      *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
@@ -522,9 +512,9 @@ class MainController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/add_favorite_stores",
+     *     path="/api/add_favorite_store",
      *     summary="Добавить любимый магазин",
-     *     tags={"Profile"},
+     *     tags={"Favorite Stores"},
      *     security={{"bearer_token":{}}},
      *     @OA\Parameter(
      *         name="store_id",
@@ -540,7 +530,7 @@ class MainController extends Controller
      *          type="array",
      *               @OA\Items(
      *                 @OA\Property(property="id", type="number", example="1"),
-     *                 @OA\Property(property="product_id", type="number", example="2"),
+     *                 @OA\Property(property="shop_id", type="number", example="2"),
      *                 @OA\Property(property="user_id", type="number", example="5"),
      *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
      *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
@@ -557,7 +547,7 @@ class MainController extends Controller
     public function addFavoriteStores(Request $request): JsonResponse
     {
         $basket = new FavoriteStores();
-        $basket->user_id = Auth::user()->id;
+        $basket->user_id = auth()->user()->id;
         $basket->shop_id = $request->store_id;
         $basket->save();
 
@@ -565,12 +555,11 @@ class MainController extends Controller
     }
 
 
-
     /**
      * @OA\Delete(
-     *     path="/api/delete_favorite_stores",
+     *     path="/api/delete_favorite_store",
      *     summary="Удалить дюбимый магазин",
-     *     tags={"Profile"},
+     *     tags={"Favorite Stores"},
      *     security={{"bearer_token":{}}},
      *     @OA\Parameter(
      *         name="id",
@@ -579,7 +568,7 @@ class MainController extends Controller
      *    ),
      *     @OA\Response(
      *         response=200,
-     *         description="Basket successfully deleted",
+     *         description="Favorite store successfully deleted",
      *     ),
      *      @OA\Response(
      *         response=404,
@@ -603,12 +592,288 @@ class MainController extends Controller
     }
 
 
+    /**
+     * @OA\Get(
+     *     path="/api/orders",
+     *     summary="Заказы",
+     *     tags={"Order"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="",
+     *         @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema (
+     *          type="array",
+     *               @OA\Items(
+     *                 @OA\Property(property="id", type="number", example="1"),
+     *                 @OA\Property(property="shop_id", type="number", example="2"),
+     *                 @OA\Property(property="user_id", type="number", example="5"),
+     *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
+     *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
+     *            ),
+     *          )
+     *         )
+     *     ),
+     * )
+     */
+    public function orders()
+    {
+        return Order::where('user_id', auth()->user()->id)->get();
+    }
+
+
+    /**
+     * @OA\Post(
+     *     path="/api/add_order",
+     *     summary="Добавить заказ",
+     *     tags={"Order"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="product_id",
+     *         in="query",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="",
+     *         @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema (
+     *          type="array",
+     *               @OA\Items(
+     *                 @OA\Property(property="id", type="number", example="1"),
+     *                 @OA\Property(property="product_id", type="number", example="2"),
+     *                 @OA\Property(property="user_id", type="number", example="5"),
+     *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
+     *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
+     *            ),
+     *          )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function addOrder(Request $request): JsonResponse
+    {
+        $order = new Order();
+        $order->product_id = $request->product_id;
+        $order->user_id = auth()->user()->id;
+        $order->save();
+
+        return response()->json($order);
+    }
+
+
+    /**
+     * @OA\Delete(
+     *     path="/api/delete_order",
+     *     summary="Удалить заказ",
+     *     tags={"Order"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="query",
+     *         required=true,
+     *    ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Order successfully deleted",
+     *     ),
+     *      @OA\Response(
+     *         response=404,
+     *         description="Not found",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function deleteOrder(Request $request): JsonResponse
+    {
+        try {
+            $basket = Order::find($request->id);
+            $basket->delete();
+            return response()->json(['Message' => 'Favorite store successfully deleted']);
+        } catch (\Exception $exception) {
+            return response()->json(['Message' => 'Error']);
+        }
+    }
+
+
+
+    /**
+     * @OA\Get(
+     *     path="/api/addresses",
+     *     summary="Адреса доставки",
+     *     tags={"Address"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="",
+     *         @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema (
+     *          type="array",
+     *               @OA\Items(
+     *                 @OA\Property(property="id", type="number", example="1"),
+     *                 @OA\Property(property="user_id", type="number", example="2"),
+     *                 @OA\Property(property="title", type="string", example="Адрес №1"),
+     *                 @OA\Property(property="city", type="string", example="Москва"),
+     *                 @OA\Property(property="street_and_house", type="string", example="Новодмитровская улица, 2к5"),
+     *                 @OA\Property(property="apartment_number", type="string", example="452"),
+     *                 @OA\Property(property="entrance_number", type="string", example="2"),
+     *                 @OA\Property(property="floor", type="string", example="23"),
+     *                 @OA\Property(property="additionally", type="string", example="Домофон: 452В"),
+     *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
+     *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
+     *            ),
+     *          )
+     *         )
+     *     ),
+     * )
+     */
+    public function getAddresses()
+    {
+        return Address::where('user_id', auth()->user()->id)->get();
+    }
+
+
+    /**
+     * @OA\Post(
+     *     path="/api/add_address",
+     *     summary="Добавить адрес доставки",
+     *     tags={"Address"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="title",
+     *         in="query",
+     *         required=true,
+     *     ),
+     *     @OA\Parameter(
+     *         name="city",
+     *         in="query",
+     *         required=true,
+     *     ),
+     *     @OA\Parameter(
+     *         name="street_and_house",
+     *         in="query",
+     *         required=true,
+     *     ),
+     *     @OA\Parameter(
+     *         name="apartment_number",
+     *         in="query",
+     *         required=true,
+     *     ),
+     *     @OA\Parameter(
+     *         name="entrance_number",
+     *         in="query",
+     *         required=true,
+     *     ),
+     *     @OA\Parameter(
+     *         name="floor",
+     *         in="query",
+     *         required=true,
+     *     ),
+     *     @OA\Parameter(
+     *         name="additionally",
+     *         in="query",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="",
+     *         @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema (
+     *          type="array",
+     *               @OA\Items(
+     *                 @OA\Property(property="id", type="number", example="1"),
+     *                 @OA\Property(property="user_id", type="number", example="2"),
+     *                 @OA\Property(property="title", type="string", example="Адрес №1"),
+     *                 @OA\Property(property="city", type="string", example="Москва"),
+     *                 @OA\Property(property="street_and_house", type="string", example="Новодмитровская улица, 2к5"),
+     *                 @OA\Property(property="apartment_number", type="string", example="452"),
+     *                 @OA\Property(property="entrance_number", type="string", example="2"),
+     *                 @OA\Property(property="floor", type="string", example="23"),
+     *                 @OA\Property(property="additionally", type="string", example="Домофон: 452В"),
+     *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
+     *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
+     *            ),
+     *          )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function addAddress(Request $request): JsonResponse
+    {
+        $address = new Address();
+        $address->title = $request->title;
+        $address->city = $request->city;
+        $address->street_and_house = $request->street_and_house;
+        $address->apartment_number = $request->apartment_number;
+        $address->entrance_number = $request->entrance_number;
+        $address->floor = $request->floor;
+        $address->additionally = $request->additionally;
+        $address->user_id = auth()->user()->id;
+        $address->save();
+
+        return response()->json($address);
+    }
+
+
+
+    /**
+     * @OA\Delete(
+     *     path="/api/delete_address",
+     *     summary="Удалить адрес доставки",
+     *     tags={"Address"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="query",
+     *         required=true,
+     *    ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Address successfully deleted",
+     *     ),
+     *      @OA\Response(
+     *         response=404,
+     *         description="Not found",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function deleteAddress(Request $request): JsonResponse
+    {
+        try {
+            $address = Address::find($request->id);
+            $address->delete();
+            return response()->json(['Message' => 'Address store successfully deleted']);
+        } catch (\Exception $exception) {
+            return response()->json(['Message' => 'Error']);
+        }
+    }
+
+
 
 
     /**
      * Get the token array structure.
      *
-     * @param  string $token
+     * @param string $token
      *
      * @return \Illuminate\Http\JsonResponse
      */

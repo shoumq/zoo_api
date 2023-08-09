@@ -52,8 +52,20 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 
     // Favorite Stores
     Route::get('favorite_stores', [MainController::class, 'favorite_stores']);
-    Route::post('add_favorite_stores', [MainController::class, 'addFavoriteStores']);
-    Route::delete('delete_favorite_stores', [MainController::class, 'deleteFavoriteStores']);
+    Route::post('add_favorite_store', [MainController::class, 'addFavoriteStores']);
+    Route::delete('delete_favorite_store', [MainController::class, 'deleteFavoriteStores']);
+
+
+    // Orders
+    Route::get('orders', [MainController::class, 'orders']);
+    Route::post('add_order', [MainController::class, 'addOrder']);
+    Route::delete('delete_order', [MainController::class, 'deleteOrder']);
+
+
+    // Addresses
+    Route::get('addresses', [MainController::class, 'getAddresses']);
+    Route::post('add_address', [MainController::class, 'addAddress']);
+    Route::delete('delete_address', [MainController::class, 'deleteAddress']);
 });
 
 

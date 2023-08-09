@@ -492,7 +492,7 @@ class MainController extends Controller
     /**
      * @OA\Get(
      *     path="/api/favorite_stores",
-     *     summary="Корзина",
+     *     summary="Любимые магазины",
      *     tags={"Profile"},
      *     security={{"bearer_token":{}}},
      *     @OA\Response(
@@ -523,7 +523,7 @@ class MainController extends Controller
     /**
      * @OA\Post(
      *     path="/api/add_favorite_stores",
-     *     summary="Добавить в корзину",
+     *     summary="Добавить любимый магазин",
      *     tags={"Profile"},
      *     security={{"bearer_token":{}}},
      *     @OA\Parameter(
@@ -569,7 +569,7 @@ class MainController extends Controller
     /**
      * @OA\Delete(
      *     path="/api/delete_favorite_stores",
-     *     summary="Удалить магазин из дюбимых магазинов",
+     *     summary="Удалить дюбимый магазин",
      *     tags={"Profile"},
      *     security={{"bearer_token":{}}},
      *     @OA\Parameter(

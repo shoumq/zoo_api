@@ -39,12 +39,21 @@ Route::group([
 
 
 Route::group(['middleware' => 'jwt.auth'], function () {
+    // favorites
     Route::get('favorites', [MainController::class, 'favorites']);
     Route::post('add_favorites', [MainController::class, 'addFavorites']);
     Route::delete('delete_favorites', [MainController::class, 'deleteFavorites']);
+
+    // Basket
     Route::get('basket', [MainController::class, 'basket']);
     Route::post('add_basket', [MainController::class, 'addBasket']);
     Route::delete('delete_basket', [MainController::class, 'deleteBasket']);
+
+
+    // Favorite Stores
+    Route::get('favorite_stores', [MainController::class, 'favorite_stores']);
+    Route::post('add_favorite_stores', [MainController::class, 'addFavoriteStores']);
+    Route::delete('delete_favorite_stores', [MainController::class, 'deleteFavoriteStores']);
 });
 
 

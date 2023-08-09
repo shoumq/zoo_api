@@ -7,6 +7,7 @@ use App\Models\Basket;
 use App\Models\Category;
 use App\Models\Email;
 use App\Models\Favorites;
+use App\Models\FavoriteStores;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\Collection;
@@ -341,7 +342,6 @@ class MainController extends Controller
 
 
 
-
     /**
      * @OA\Get(
      *     path="/api/basket",
@@ -485,6 +485,124 @@ class MainController extends Controller
 
         return response()->json(['Message' => 'Successfully']);
     }
+
+
+
+
+    /**
+     * @OA\Get(
+     *     path="/api/favorite_stores",
+     *     summary="Корзина",
+     *     tags={"Profile"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="",
+     *         @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema (
+     *          type="array",
+     *               @OA\Items(
+     *                 @OA\Property(property="id", type="number", example="1"),
+     *                 @OA\Property(property="product_id", type="number", example="2"),
+     *                 @OA\Property(property="user_id", type="number", example="5"),
+     *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
+     *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
+     *            ),
+     *          )
+     *         )
+     *     ),
+     * )
+     */
+    public function favorite_stores()
+    {
+        return FavoriteStores::where('user_id', auth()->user()->id)->get();
+    }
+
+
+    /**
+     * @OA\Post(
+     *     path="/api/add_favorite_stores",
+     *     summary="Добавить в корзину",
+     *     tags={"Profile"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="store_id",
+     *         in="query",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="",
+     *         @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema (
+     *          type="array",
+     *               @OA\Items(
+     *                 @OA\Property(property="id", type="number", example="1"),
+     *                 @OA\Property(property="product_id", type="number", example="2"),
+     *                 @OA\Property(property="user_id", type="number", example="5"),
+     *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
+     *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
+     *            ),
+     *          )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function addFavoriteStores(Request $request): JsonResponse
+    {
+        $basket = new FavoriteStores();
+        $basket->user_id = Auth::user()->id;
+        $basket->shop_id = $request->store_id;
+        $basket->save();
+
+        return response()->json($basket);
+    }
+
+
+
+    /**
+     * @OA\Delete(
+     *     path="/api/delete_favorite_stores",
+     *     summary="Удалить магазин из дюбимых магазинов",
+     *     tags={"Profile"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="query",
+     *         required=true,
+     *    ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Basket successfully deleted",
+     *     ),
+     *      @OA\Response(
+     *         response=404,
+     *         description="Not found",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function deleteFavoriteStores(Request $request): JsonResponse
+    {
+        try {
+            $basket = FavoriteStores::find($request->id);
+            $basket->delete();
+            return response()->json(['Message' => 'Favorite store successfully deleted']);
+        } catch (\Exception $exception) {
+            return response()->json(['Message' => 'Error']);
+        }
+    }
+
+
 
 
     /**

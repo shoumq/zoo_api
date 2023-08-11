@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\SubcategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('register', [MainController::class, 'registerStore']);
 Route::get('categories', [MainController::class, 'categories']);
+Route::get('subcategories', [SubcategoryController::class, 'subcategories']);
 Route::post('test', [MainController::class, 'test']);
 Route::post('subscribe_to_newsletter', [MainController::class, 'subscribeToNewsletter']);
 
@@ -39,7 +41,7 @@ Route::group([
 
 
 Route::group(['middleware' => 'jwt.auth'], function () {
-    // favorites
+    // Favorites
     Route::get('favorites', [MainController::class, 'favorites']);
     Route::post('add_favorites', [MainController::class, 'addFavorites']);
     Route::delete('delete_favorites', [MainController::class, 'deleteFavorites']);
@@ -69,13 +71,20 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 });
 
 
-Route::post('add_admin', [AdminController::class, 'addAdmin']);
-
-
 Route::group(['middleware' => 'admin'], function () {
+    // Category
     Route::post('add_category', [MainController::class, 'addCategory']);
     Route::delete('delete_category', [MainController::class, 'deleteCategory']);
+
+    // Subcategory
+    Route::post('add_subcategory', [SubcategoryController::class, 'addSubcategory']);
+    Route::delete('delete_subcategory', [SubcategoryController::class, 'deleteSubcategory']);
+
+    // Admin
     Route::post('delete_admin', [AdminController::class, 'deleteAdmin']);
+    Route::post('add_admin', [AdminController::class, 'addAdmin']);
+
+    // Profile
     Route::get('user/{user_id}', [AdminController::class, 'getUser']);
     Route::get('display_of_subscribers', [AdminController::class, 'displayOfSubscribers']);
 });

@@ -10,6 +10,7 @@ use App\Models\Email;
 use App\Models\Favorites;
 use App\Models\FavoriteStores;
 use App\Models\Order;
+use App\Models\Subcategory;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\Collection;
@@ -861,28 +862,10 @@ class MainController extends Controller
         try {
             $address = Address::find($request->id);
             $address->delete();
-            return response()->json(['Message' => 'Address store successfully deleted']);
+            return response()->json(['Message' => 'Address successfully deleted']);
         } catch (\Exception $exception) {
             return response()->json(['Message' => 'Error']);
         }
     }
 
-
-
-
-    /**
-     * Get the token array structure.
-     *
-     * @param string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondWithToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 43200
-        ]);
-    }
 }

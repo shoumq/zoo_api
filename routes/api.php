@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SubcategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,10 +25,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('register', [MainController::class, 'registerStore']);
+
 Route::get('categories', [MainController::class, 'categories']);
 Route::get('subcategories', [SubcategoryController::class, 'subcategories']);
+Route::get('get_category_info/{category_id}', [MainController::class, 'getCategoryInfo']);
+Route::get('get_subcategory_info/{subcategory_id}', [MainController::class, 'getSubcategoryInfo']);
+
 Route::post('test', [MainController::class, 'test']);
+
 Route::post('subscribe_to_newsletter', [MainController::class, 'subscribeToNewsletter']);
+
+Route::get('products', [ProductController::class, 'getProducts']);
+Route::get('product/{product_id}', [ProductController::class, 'getProductsById']);
 
 Route::group([
     'middleware' => 'api',
@@ -87,4 +96,8 @@ Route::group(['middleware' => 'admin'], function () {
     // Profile
     Route::get('user/{user_id}', [AdminController::class, 'getUser']);
     Route::get('display_of_subscribers', [AdminController::class, 'displayOfSubscribers']);
+
+    // Product
+    Route::post('add_product', [ProductController::class, 'addProduct']);
+    Route::delete('delete_product', [ProductController::class, 'deleteProduct']);
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -83,8 +84,11 @@ class SubcategoryController extends Controller
      */
     public function addSubcategory(Request $request): JsonResponse
     {
+        $category_title = Category::where('id', $request->category_id)->first()->title;
+
         $subcategory = new Subcategory();
         $subcategory->category_id = $request->category_id;
+        $subcategory->category_title = $category_title;
         $subcategory->title = $request->title;
         $subcategory->code = $request->code;
         $subcategory->save();
@@ -113,12 +117,12 @@ class SubcategoryController extends Controller
      */
     public function deleteSubcategory(Request $request): JsonResponse
     {
-        try {
+        if (Subcategory::find($request->id) != null) {
             $address = Subcategory::find($request->id);
             $address->delete();
             return response()->json(['Message' => 'Subcategory successfully deleted']);
-        } catch (\Exception $exception) {
-            return response()->json(['Message' => 'Error']);
+        } else {
+            return response()->json(['Message' => 'Not found.'], 404);
         }
     }
 

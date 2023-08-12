@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\BasketResource;
+use App\Http\Resources\FavoritesResource;
+use App\Http\Resources\OrderResource;
 use App\Models\Address;
 use App\Models\Basket;
 use App\Models\Category;
@@ -213,12 +216,12 @@ class MainController extends Controller
      */
     public function deleteCategory(Request $request): JsonResponse
     {
-        try {
+        if (Category::find($request->id) != null) {
             $category = Category::find($request->id);
             $category->delete();
             return response()->json(['Message' => 'Category successfully deleted']);
-        } catch (\Exception $exception) {
-            return response()->json(['Message' => 'Error']);
+        } else {
+            return response()->json(['Message' => 'Not found'], 404);
         }
     }
 
@@ -237,8 +240,8 @@ class MainController extends Controller
      *         @OA\Schema (
      *          type="array",
      *               @OA\Items(
-     *                 @OA\Property(property="id", type="number", example="1"),
-     *                 @OA\Property(property="product_id", type="number", example="2"),
+     *                 @OA\Property(property="id", type="number", example="14"),
+     *                 @OA\Property(property="product_info", type="string", format="array", example={ "id": 1, "title": "Кошачий корм deluxe", "category_id": "2", "category_title": "Коты", "subcategory_id": "1", "subcategory_title": "Кошачий корм", "description": "Кошачий корм deluxe +++", "price": "1435.0", "created_at": "2023-08-11T22:13:23.000000Z", "updated_at": "2023-08-11T22:13:23.000000Z" }),
      *                 @OA\Property(property="user_id", type="number", example="5"),
      *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
      *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
@@ -248,9 +251,9 @@ class MainController extends Controller
      *     ),
      * )
      */
-    public function favorites()
+    public function favorites(): array
     {
-        return Favorites::where('user_id', auth()->user()->id)->get();
+        return FavoritesResource::collection(Favorites::where('user_id', auth()->user()->id)->get())->resolve();
     }
 
 
@@ -273,8 +276,8 @@ class MainController extends Controller
      *         @OA\Schema (
      *          type="array",
      *               @OA\Items(
-     *                 @OA\Property(property="id", type="number", example="1"),
-     *                 @OA\Property(property="product_id", type="number", example="2"),
+     *                 @OA\Property(property="id", type="number", example="14"),
+     *                 @OA\Property(property="product_info", type="string", format="array", example={ "id": 1, "title": "Кошачий корм deluxe", "category_id": "2", "category_title": "Коты", "subcategory_id": "1", "subcategory_title": "Кошачий корм", "description": "Кошачий корм deluxe +++", "price": "1435.0", "created_at": "2023-08-11T22:13:23.000000Z", "updated_at": "2023-08-11T22:13:23.000000Z" }),
      *                 @OA\Property(property="user_id", type="number", example="5"),
      *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
      *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
@@ -295,7 +298,7 @@ class MainController extends Controller
         $favorite->product_id = $request->product_id;
         $favorite->save();
 
-        return response()->json($favorite);
+        return response()->json(FavoritesResource::collection([$favorite])->resolve());
     }
 
 
@@ -326,12 +329,12 @@ class MainController extends Controller
      */
     public function deleteFavorites(Request $request): JsonResponse
     {
-        try {
+        if (Favorites::find($request->id) != null) {
             $favorite = Favorites::find($request->id);
             $favorite->delete();
             return response()->json(['Message' => 'Favorite successfully deleted']);
-        } catch (\Exception $exception) {
-            return response()->json(['Message' => 'Error']);
+        } else {
+            return response()->json(['Message' => 'Not found.'], 404);
         }
     }
 
@@ -350,8 +353,8 @@ class MainController extends Controller
      *         @OA\Schema (
      *          type="array",
      *               @OA\Items(
-     *                 @OA\Property(property="id", type="number", example="1"),
-     *                 @OA\Property(property="product_id", type="number", example="2"),
+     *                 @OA\Property(property="id", type="number", example="14"),
+     *                 @OA\Property(property="product_info", type="string", format="array", example={ "id": 1, "title": "Кошачий корм deluxe", "category_id": "2", "category_title": "Коты", "subcategory_id": "1", "subcategory_title": "Кошачий корм", "description": "Кошачий корм deluxe +++", "price": "1435.0", "created_at": "2023-08-11T22:13:23.000000Z", "updated_at": "2023-08-11T22:13:23.000000Z" }),
      *                 @OA\Property(property="user_id", type="number", example="5"),
      *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
      *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
@@ -361,9 +364,9 @@ class MainController extends Controller
      *     ),
      * )
      */
-    public function basket()
+    public function basket(): array
     {
-        return Basket::where('user_id', auth()->user()->id)->get();
+        return BasketResource::collection(Basket::where('user_id', auth()->user()->id)->get())->resolve();
     }
 
 
@@ -386,8 +389,8 @@ class MainController extends Controller
      *         @OA\Schema (
      *          type="array",
      *               @OA\Items(
-     *                 @OA\Property(property="id", type="number", example="1"),
-     *                 @OA\Property(property="product_id", type="number", example="2"),
+     *                 @OA\Property(property="id", type="number", example="14"),
+     *                 @OA\Property(property="product_info", type="string", format="array", example={ "id": 1, "title": "Кошачий корм deluxe", "category_id": "2", "category_title": "Коты", "subcategory_id": "1", "subcategory_title": "Кошачий корм", "description": "Кошачий корм deluxe +++", "price": "1435.0", "created_at": "2023-08-11T22:13:23.000000Z", "updated_at": "2023-08-11T22:13:23.000000Z" }),
      *                 @OA\Property(property="user_id", type="number", example="5"),
      *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
      *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
@@ -439,12 +442,12 @@ class MainController extends Controller
      */
     public function deleteBasket(Request $request): JsonResponse
     {
-        try {
+        if (Basket::find($request->id) != null) {
             $basket = Basket::find($request->id);
             $basket->delete();
             return response()->json(['Message' => 'Basket successfully deleted']);
-        } catch (\Exception $exception) {
-            return response()->json(['Message' => 'Error']);
+        } else {
+            return response()->json(['Message' => 'Not found.'], 404);
         }
     }
 
@@ -583,12 +586,12 @@ class MainController extends Controller
      */
     public function deleteFavoriteStores(Request $request): JsonResponse
     {
-        try {
+        if (FavoriteStores::find($request->id) != null) {
             $basket = FavoriteStores::find($request->id);
             $basket->delete();
             return response()->json(['Message' => 'Favorite store successfully deleted']);
-        } catch (\Exception $exception) {
-            return response()->json(['Message' => 'Error']);
+        } else {
+            return response()->json(['Message' => 'Not found.'], 404);
         }
     }
 
@@ -607,8 +610,8 @@ class MainController extends Controller
      *         @OA\Schema (
      *          type="array",
      *               @OA\Items(
-     *                 @OA\Property(property="id", type="number", example="1"),
-     *                 @OA\Property(property="shop_id", type="number", example="2"),
+     *                 @OA\Property(property="id", type="number", example="14"),
+     *                 @OA\Property(property="product_info", type="string", format="array", example={ "id": 1, "title": "Кошачий корм deluxe", "category_id": "2", "category_title": "Коты", "subcategory_id": "1", "subcategory_title": "Кошачий корм", "description": "Кошачий корм deluxe +++", "price": "1435.0", "created_at": "2023-08-11T22:13:23.000000Z", "updated_at": "2023-08-11T22:13:23.000000Z" }),
      *                 @OA\Property(property="user_id", type="number", example="5"),
      *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
      *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
@@ -618,9 +621,9 @@ class MainController extends Controller
      *     ),
      * )
      */
-    public function orders()
+    public function orders(): array
     {
-        return Order::where('user_id', auth()->user()->id)->get();
+        return OrderResource::collection(Order::where('user_id', auth()->user()->id)->get())->resolve();
     }
 
 
@@ -643,8 +646,8 @@ class MainController extends Controller
      *         @OA\Schema (
      *          type="array",
      *               @OA\Items(
-     *                 @OA\Property(property="id", type="number", example="1"),
-     *                 @OA\Property(property="product_id", type="number", example="2"),
+     *                 @OA\Property(property="id", type="number", example="14"),
+     *                 @OA\Property(property="product_info", type="string", format="array", example={ "id": 1, "title": "Кошачий корм deluxe", "category_id": "2", "category_title": "Коты", "subcategory_id": "1", "subcategory_title": "Кошачий корм", "description": "Кошачий корм deluxe +++", "price": "1435.0", "created_at": "2023-08-11T22:13:23.000000Z", "updated_at": "2023-08-11T22:13:23.000000Z" }),
      *                 @OA\Property(property="user_id", type="number", example="5"),
      *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
      *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
@@ -665,7 +668,7 @@ class MainController extends Controller
         $order->user_id = auth()->user()->id;
         $order->save();
 
-        return response()->json($order);
+        return response()->json(OrderResource::collection([$order])->resolve());
     }
 
 
@@ -696,15 +699,14 @@ class MainController extends Controller
      */
     public function deleteOrder(Request $request): JsonResponse
     {
-        try {
+        if (Order::find($request->id) != null) {
             $basket = Order::find($request->id);
             $basket->delete();
-            return response()->json(['Message' => 'Favorite store successfully deleted']);
-        } catch (\Exception $exception) {
-            return response()->json(['Message' => 'Error']);
+            return response()->json(['Message' => 'Order successfully deleted']);
+        } else {
+            return response()->json(['Message' => 'Not found.'], 404);
         }
     }
-
 
 
     /**
@@ -831,7 +833,6 @@ class MainController extends Controller
     }
 
 
-
     /**
      * @OA\Delete(
      *     path="/api/delete_address",
@@ -859,13 +860,95 @@ class MainController extends Controller
      */
     public function deleteAddress(Request $request): JsonResponse
     {
-        try {
+        if (Address::find($request->id) != null) {
             $address = Address::find($request->id);
             $address->delete();
             return response()->json(['Message' => 'Address successfully deleted']);
-        } catch (\Exception $exception) {
-            return response()->json(['Message' => 'Error']);
+        } else {
+            return response()->json(['Message' => 'Not found.'], 404);
         }
     }
 
+
+    /**
+     * @OA\Get(
+     *     path="/api/get_category_info/{category_id}",
+     *     summary="Информация о категории по ID",
+     *     tags={"Category"},
+     *     @OA\Parameter(
+     *         name="category_id",
+     *         in="path",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="",
+     *         @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema (
+     *          type="array",
+     *               @OA\Items(
+     *                 @OA\Property(property="id", type="number", example="5"),
+     *                 @OA\Property(property="title", type="string", example="Коты"),
+     *                 @OA\Property(property="code", type="number", example="cats"),
+     *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
+     *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
+     *            ),
+     *          )
+     *         )
+     *     ),
+     * )
+     */
+    public function getCategoryInfo($category_id): JsonResponse
+    {
+        if (Category::where('id', $category_id)->first() != null) {
+            $category = Category::where('id', $category_id)->first();
+            return response()->json($category);
+        } else {
+            return response()->json(['Message' => 'Category not found.'], 404);
+        }
+    }
+
+
+
+    /**
+     * @OA\Get(
+     *     path="/api/get_subcategory_info/{subcategory_id}",
+     *     summary="Информация о категории по ID",
+     *     tags={"Subcategory"},
+     *     @OA\Parameter(
+     *         name="subcategory_id",
+     *         in="path",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="",
+     *         @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema (
+     *          type="array",
+     *               @OA\Items(
+     *                 @OA\Property(property="id", type="number", example="5"),
+     *                 @OA\Property(property="category_id", type="number", example="2"),
+     *                 @OA\Property(property="category_title", type="string", example="Коты"),
+     *                 @OA\Property(property="title", type="string", example="Кошачий корм"),
+     *                 @OA\Property(property="code", type="number", example="cat_food"),
+     *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
+     *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
+     *            ),
+     *          )
+     *         )
+     *     ),
+     * )
+     */
+    public function getSubcategoryInfo($subcategory_id): JsonResponse
+    {
+        if (Subcategory::where('id', $subcategory_id)->first() != null) {
+            $category = Subcategory::where('id', $subcategory_id)->first();
+            return response()->json($category);
+        } else {
+            return response()->json(['Message' => 'Subcategory not found.'], 404);
+        }
+    }
 }

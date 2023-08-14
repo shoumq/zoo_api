@@ -108,7 +108,12 @@ class MainController extends Controller
                     return response()->json(['error' => 'Unauthorized'], 401);
                 }
 
-                return $this->respondWithToken($token);
+                return response()->json([
+                    'access_token' => $token,
+                    'token_type' => 'bearer',
+                    'expires_in' => auth()->factory()->getTTL() * 43200,
+                    'user' => $user
+                ]);
             }
 
             return response()->json("Password error");
@@ -957,5 +962,15 @@ class MainController extends Controller
         } else {
             return response()->json(['Message' => 'Subcategory not found.'], 404);
         }
+    }
+
+
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 43200
+        ]);
     }
 }

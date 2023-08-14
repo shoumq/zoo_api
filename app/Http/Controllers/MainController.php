@@ -136,6 +136,7 @@ class MainController extends Controller
      *                 @OA\Property(property="code", type="string", example="sales", minLength=1, maxLength=150),
      *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
      *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
+     *                 @OA\Property(property="image", type="string", example="image_title"),
      *            ),
      *          )
      *         )
@@ -164,6 +165,11 @@ class MainController extends Controller
      *         in="query",
      *         required=true,
      *    ),
+     *     @OA\Parameter(
+     *         name="image",
+     *         in="query",
+     *         required=true,
+     *    ),
      *     @OA\Response(
      *         response=200,
      *         description="Category successfully created",
@@ -183,9 +189,10 @@ class MainController extends Controller
         $category = new Category();
         $category->title = $request->title;
         $category->code = $request->code;
+        $category->image = $request->image;
         $category->save();
 
-        return response()->json(['Message' => 'Category successfully created']);
+        return response()->json($category);
     }
 
 

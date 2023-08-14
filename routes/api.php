@@ -95,6 +95,7 @@ Route::group(['middleware' => 'admin'], function () {
 
     // Profile
     Route::get('user/{user_id}', [AdminController::class, 'getUser']);
+    Route::get('users', [AdminController::class, 'getUsers']);
     Route::get('display_of_subscribers', [AdminController::class, 'displayOfSubscribers']);
 
     // Product

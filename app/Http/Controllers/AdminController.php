@@ -46,8 +46,6 @@ class AdminController extends Controller
     }
 
 
-
-
     /**
      * @OA\Post(
      *     path="/api/delete_admin",
@@ -81,7 +79,6 @@ class AdminController extends Controller
 
         return response()->json(['Message' => $user->name . ' is no longer an admin']);
     }
-
 
 
     /**
@@ -126,9 +123,54 @@ class AdminController extends Controller
      *     )
      * )
      */
-    public function getUser($user_id)
+    public function getUser($user_id): JsonResponse
     {
-        return User::find($user_id);
+        return response()->json(User::find($user_id));
+    }
+
+
+
+
+    /**
+     * @OA\Get(
+     *     path="/api/users",
+     *     summary="Вывод всех пользователей",
+     *     tags={"Profile"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="",
+     *         @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema (
+     *          type="array",
+     *               @OA\Items(
+     *                 @OA\Property(property="id", type="number", example="1"),
+     *                 @OA\Property(property="name", type="string", example="Андрей", minLength=1, maxLength=50),
+     *                 @OA\Property(property="surname", type="string", example="Лясковский", minLength=1, maxLength=50),
+     *                 @OA\Property(property="address", type="string", example="1-й Красногвардейский проезд, 22с1, Москва"),
+     *                 @OA\Property(property="phone", type="string", example="+7 (903) 111-11-11"),
+     *                 @OA\Property(property="email", type="string", example="lae3145@mail.ru", minLength=3, maxLength=50),
+     *                 @OA\Property(property="email_verified_at", type="string", example="null"),
+     *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
+     *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
+     *            ),
+     *          ),
+     *         )
+     *     ),
+     *      @OA\Response(
+     *         response=404,
+     *         description="Not found",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function getUsers(): JsonResponse
+    {
+        return response()->json(User::all());
     }
 
 

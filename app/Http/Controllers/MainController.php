@@ -29,7 +29,7 @@ class MainController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/register",
+     *     path="/api/auth/register",
      *     summary="Регистрация",
      *     tags={"Auth"},
      *     @OA\Parameter(

@@ -40,6 +40,44 @@ class SubcategoryController extends Controller
     }
 
 
+    /**
+     * @OA\Get(
+     *     path="/api/get_subcategories_by_category_id/{category_id}",
+     *     summary="Вывод подкатегорий по id категории",
+     *     tags={"Subcategory"},
+     *     @OA\Parameter(
+     *         name="category_id",
+     *         in="path",
+     *         required=true,
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="",
+     *         @OA\MediaType(
+     *         mediaType="application/json",
+     *         @OA\Schema (
+     *          type="array",
+     *               @OA\Items(
+     *                 @OA\Property(property="id", type="number", example="5"),
+     *                 @OA\Property(property="category_id", type="number", example="2"),
+     *                 @OA\Property(property="category_title", type="string", example="Коты"),
+     *                 @OA\Property(property="title", type="string", example="Кошачий корм"),
+     *                 @OA\Property(property="code", type="string", example="cat_food"),
+     *                 @OA\Property(property="created_at", type="time", example="2023-07-06T08:27:30.000000Z"),
+     *                 @OA\Property(property="updated_at", type="time", example="2023-07-06T09:45:07.000000Z"),
+     *            ),
+     *          )
+     *         )
+     *     ),
+     * )
+     */
+    public function getSubcategoriesByCategoryId($category_id): JsonResponse
+    {
+        $categories = Subcategory::where('category_id', $category_id)->first();
+        return response()->json($categories);
+    }
+
+
 
     /**
      * @OA\Post(

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\BasketResource;
 use App\Http\Resources\FavoritesResource;
+use App\Http\Resources\FavoriteStoresResource;
 use App\Http\Resources\OrderResource;
 use App\Models\Address;
 use App\Models\Basket;
@@ -520,9 +521,9 @@ class MainController extends Controller
      *     ),
      * )
      */
-    public function favorite_stores()
+    public function favorite_stores(): array
     {
-        return FavoriteStores::where('user_id', auth()->user()->id)->get();
+        return FavoriteStoresResource::collection(FavoriteStores::where('user_id', auth()->user()->id)->get())->resolve();
     }
 
 

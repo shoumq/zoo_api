@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\StoreController;
 use App\Http\Controllers\SubcategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,7 @@ Route::get('categories', [MainController::class, 'categories']);
 Route::get('subcategories', [SubcategoryController::class, 'subcategories']);
 Route::get('get_category_info/{category_id}', [MainController::class, 'getCategoryInfo']);
 Route::get('get_subcategory_info/{subcategory_id}', [MainController::class, 'getSubcategoryInfo']);
+Route::get('get_subcategories_by_category_id/{category_id}', [SubcategoryController::class, 'getSubcategoriesByCategoryId']);
 
 Route::post('test', [MainController::class, 'test']);
 
@@ -37,6 +39,10 @@ Route::post('subscribe_to_newsletter', [MainController::class, 'subscribeToNewsl
 
 Route::get('products', [ProductController::class, 'getProducts']);
 Route::get('product/{product_id}', [ProductController::class, 'getProductsById']);
+
+Route::get('get_stores', [StoreController::class, 'getStores']);
+Route::get('get_store_by_id/{store_id}', [StoreController::class, 'getStoreById']);
+Route::get('get_store_by_code/{store_code}', [StoreController::class, 'getStoreByCode']);
 
 Route::group([
     'middleware' => 'api',
@@ -101,4 +107,8 @@ Route::group(['middleware' => 'admin'], function () {
     // Product
     Route::post('add_product', [ProductController::class, 'addProduct']);
     Route::delete('delete_product', [ProductController::class, 'deleteProduct']);
+
+    // Stores
+    Route::post('add_store', [StoreController::class, 'addStore']);
+    Route::delete('delete_store', [StoreController::class, 'deleteStore']);
 });

@@ -90,6 +90,7 @@ Route::group(['middleware' => 'admin'], function () {
     // Category
     Route::post('add_category', [MainController::class, 'addCategory']);
     Route::delete('delete_category', [MainController::class, 'deleteCategory']);
+    Route::patch('change_category', [MainController::class, 'changeCategory']);
 
     // Subcategory
     Route::post('add_subcategory', [SubcategoryController::class, 'addSubcategory']);

@@ -176,6 +176,11 @@ class MainController extends Controller
      *         in="query",
      *         required=true,
      *    ),
+     *     @OA\Parameter(
+     *         name="icon",
+     *         in="query",
+     *         required=false,
+     *    ),
      *     @OA\Response(
      *         response=200,
      *         description="Category successfully created",
@@ -196,9 +201,72 @@ class MainController extends Controller
         $category->title = $request->title;
         $category->code = $request->code;
         $category->image = $request->image;
+        $category->icon = $request->icon;
         $category->save();
 
         return response()->json($category);
+    }
+
+
+
+    /**
+     * @OA\Patch(
+     *     path="/api/change_category",
+     *     summary="Изменить категорию",
+     *     tags={"Category"},
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="query",
+     *         required=true,
+     *    ),
+     *     @OA\Parameter(
+     *         name="title",
+     *         in="query",
+     *         required=false,
+     *    ),
+     *    @OA\Parameter(
+     *         name="code",
+     *         in="query",
+     *         required=false,
+     *    ),
+     *     @OA\Parameter(
+     *         name="image",
+     *         in="query",
+     *         required=false,
+     *    ),
+     *     @OA\Parameter(
+     *         name="icon",
+     *         in="query",
+     *         required=false,
+     *    ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Category successfully changed",
+     *     ),
+     *      @OA\Response(
+     *         response=404,
+     *         description="Not found",
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *     )
+     * )
+     */
+    public function changeCategory(Request $request): JsonResponse
+    {
+        $category = Category::find($request->id);
+        if ($category != null) {
+            $category->title = ($request->title == null) ? $category->title : $request->title;
+            $category->code = ($request->code == null) ? $category->code : $request->code;
+            $category->image = ($request->image == null) ? $category->image : $request->image;
+            $category->icon = ($request->icon == null) ? $category->icon : $request->icon;
+            $category->save();
+
+            return response()->json($category);
+        }
+        return response()->json(['Message' => 'Not found.'], 404);
     }
 
 
